@@ -19345,41 +19345,118 @@ var define;
   }
 }.call(this));
 
-},{"buffer":"../../.config/yarn/global/node_modules/buffer/index.js"}],"index.js":[function(require,module,exports) {
+},{"buffer":"../../.config/yarn/global/node_modules/buffer/index.js"}],"src/attributes.js":[function(require,module,exports) {
 "use strict";
 
-require("./index.css");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.showIntersectionsLog = exports.showLog = exports.iterations = exports.radius = exports.showConnectingLines = exports.showIntersectingCircles = exports.showInitialLines = exports.CANVAS_HEIGHT = exports.CANVAS_WIDTH = void 0;
+var CANVAS_WIDTH = 500;
+exports.CANVAS_WIDTH = CANVAS_WIDTH;
+var CANVAS_HEIGHT = 800;
+exports.CANVAS_HEIGHT = CANVAS_HEIGHT;
+var showInitialLines = false;
+exports.showInitialLines = showInitialLines;
+var showIntersectingCircles = false;
+exports.showIntersectingCircles = showIntersectingCircles;
+var showConnectingLines = true;
+exports.showConnectingLines = showConnectingLines;
+var radius = 50;
+exports.radius = radius;
+var iterations = 100;
+exports.iterations = iterations;
+var showLog = true;
+exports.showLog = showLog;
+var showIntersectionsLog = false;
+exports.showIntersectionsLog = showIntersectionsLog;
+},{}],"src/utils/randoms.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getRandomX = exports.yRandom = exports.xRandom = void 0;
 
 var _lodash = require("lodash");
 
-var CANVAS_WIDTH = 500;
-var CANVAS_HEIGHT = 800;
-var showInitialLines = false;
-var showIntersectingCircles = false;
-var radius = 40;
-var iterations = 400;
-var pointIntersections = [];
+var _attributes = require("../attributes");
 
 var xRandom = function xRandom() {
-  return (0, _lodash.round)((0, _lodash.random)(0, CANVAS_WIDTH));
+  return (0, _lodash.round)((0, _lodash.random)(0, _attributes.CANVAS_WIDTH));
 };
+
+exports.xRandom = xRandom;
 
 var yRandom = function yRandom() {
-  return (0, _lodash.round)((0, _lodash.random)(0, CANVAS_HEIGHT));
+  return (0, _lodash.round)((0, _lodash.random)(0, _attributes.CANVAS_HEIGHT));
 };
 
-var canvas = document.createElement('canvas');
-canvas.id = 'canvas';
-canvas.width = CANVAS_WIDTH;
-canvas.height = CANVAS_HEIGHT;
-document.body.appendChild(canvas);
-var ctx = canvas.getContext('2d');
-var logArea = document.createElement('div');
-logArea.id = 'log-area';
-document.body.insertBefore(logArea, canvas.nextSibling); // y = mx + b
-// m is slope which is change in Y / change in X
-// b is y-intercept where line intersects y
-// yIntercept = b=y+mx
+exports.yRandom = yRandom;
+
+var getRandomX = function getRandomX(start, end) {
+  return (0, _lodash.random)(Math.min((0, _lodash.round)(start.x), (0, _lodash.round)(end.x)), Math.max((0, _lodash.round)(start.x), (0, _lodash.round)(end.x)));
+};
+
+exports.getRandomX = getRandomX;
+},{"lodash":"node_modules/lodash/lodash.js","../attributes":"src/attributes.js"}],"src/DOMnodes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawIntersectionsLog = exports.drawToLog = exports.drawLogArea = exports.draw2DCanvas = void 0;
+
+var _attributes = require("./attributes");
+
+var draw2DCanvas = function draw2DCanvas() {
+  var canvas = document.createElement('canvas');
+  canvas.id = 'canvas';
+  canvas.width = _attributes.CANVAS_WIDTH;
+  canvas.height = _attributes.CANVAS_HEIGHT;
+  document.body.appendChild(canvas);
+  var ctx = canvas.getContext('2d');
+  return {
+    ctx: ctx,
+    canvas: canvas
+  };
+};
+
+exports.draw2DCanvas = draw2DCanvas;
+
+var drawLogArea = function drawLogArea(canvas) {
+  var logArea = document.createElement('div');
+  logArea.id = 'log-area';
+  document.body.insertBefore(logArea, canvas.nextSibling);
+  return logArea;
+};
+
+exports.drawLogArea = drawLogArea;
+
+var drawToLog = function drawToLog(logArea, content) {
+  var el = document.createElement('div');
+  el.textContent = content;
+  logArea.appendChild(el);
+};
+
+exports.drawToLog = drawToLog;
+
+var drawIntersectionsLog = function drawIntersectionsLog(pointIntersections, logArea) {
+  if (_attributes.showIntersectionsLog) {
+    pointIntersections.forEach(function (p) {
+      drawToLog(logArea, "x: ".concat(p.x, ", y: ").concat(p.y));
+    });
+  }
+};
+
+exports.drawIntersectionsLog = drawIntersectionsLog;
+},{"./attributes":"src/attributes.js"}],"src/drawCircles.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawCircle = void 0;
 
 var drawCircle = function drawCircle(ctx, x, y, radius) {
   ctx.beginPath();
@@ -19391,6 +19468,44 @@ var drawCircle = function drawCircle(ctx, x, y, radius) {
   ctx.stroke();
 };
 
+exports.drawCircle = drawCircle;
+},{}],"src/utils/lineFunctions.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getYIntercept = exports.getSlope = void 0;
+
+var getSlope = function getSlope(start, end) {
+  return (end.y - start.y) / (end.x - start.x);
+};
+
+exports.getSlope = getSlope;
+
+var getYIntercept = function getYIntercept(start, slope) {
+  return start.y - slope * start.x;
+};
+
+exports.getYIntercept = getYIntercept;
+},{}],"src/drawLines.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.drawConnectingLines = exports.drawLines = exports.drawSingleLine = void 0;
+
+var _lodash = require("lodash");
+
+var _drawCircles = require("./drawCircles");
+
+var _lineFunctions = require("./utils/lineFunctions");
+
+var _randoms = require("./utils/randoms");
+
+var _attributes = require("./attributes");
+
 var drawSingleLine = function drawSingleLine(ctx, start, end, color) {
   ctx.beginPath();
   ctx.moveTo(start.x, start.y);
@@ -19399,52 +19514,94 @@ var drawSingleLine = function drawSingleLine(ctx, start, end, color) {
   ctx.stroke();
 };
 
-var drawLines = function drawLines(ctx, start, end) {
-  if (showInitialLines) drawSingleLine(ctx, start, end);
-  var newEnd;
-  var newStartX;
-  var slope = (end.y - start.y) / (end.x - start.x);
-  var yIntercept = start.y - slope * start.x;
-  var randomX = (0, _lodash.random)(Math.min((0, _lodash.round)(start.x), (0, _lodash.round)(end.x)), Math.max((0, _lodash.round)(start.x), (0, _lodash.round)(end.x)));
-  var yFromX = slope * randomX + yIntercept;
-  newStartX = (0, _lodash.round)(randomX);
-  var newStart = {
-    x: newStartX,
-    y: start.x === newStartX ? yRandom() : (0, _lodash.round)(yFromX)
+exports.drawSingleLine = drawSingleLine;
+
+var drawLines = function drawLines(ctx, start, end, iterations) {
+  var intersections = [];
+  var iter = iterations;
+
+  var drawFunc = function drawFunc(ctx, start, end, iter) {
+    if (_attributes.showInitialLines) drawSingleLine(ctx, start, end, "rgb(".concat(iter, ", ").concat(iter, ", ").concat(iter));
+    var slope = (0, _lineFunctions.getSlope)(start, end);
+    var yIntercept = (0, _lineFunctions.getYIntercept)(start, slope);
+    var randomX = (0, _randoms.getRandomX)(start, end);
+    var yFromX = slope * randomX + yIntercept;
+    var newStartX = (0, _lodash.round)(randomX);
+    var newStart = {
+      x: newStartX,
+      y: start.x === newStartX ? (0, _randoms.yRandom)() : (0, _lodash.round)(yFromX)
+    };
+    var newEnd = {
+      x: (0, _randoms.xRandom)(),
+      y: (0, _randoms.yRandom)()
+    };
+    iter--;
+    intersections.push(newStart);
+    if (_attributes.showIntersectingCircles) (0, _drawCircles.drawCircle)(ctx, newStart.x, newStart.y, _attributes.radius);
+    if (iter) drawFunc(ctx, newStart, newEnd, iter);
   };
-  newEnd = {
-    x: xRandom(),
-    y: yRandom()
-  }; //ctx.fillRect(newStart.x,newStart.y,5,5);
 
-  iterations--;
-  pointIntersections.push(newStart);
-  if (showIntersectingCircles) drawCircle(ctx, newStart.x, newStart.y, radius);
-  if (iterations) drawLines(ctx, newStart, newEnd);
+  drawFunc(ctx, start, end, iter);
+  return intersections;
 };
 
-var start = {
-  x: xRandom(),
-  y: yRandom()
-};
-var end = {
-  x: xRandom(),
-  y: yRandom()
-};
-drawLines(ctx, start, end);
-pointIntersections.forEach(function (p) {
-  var el = document.createElement('div');
-  el.textContent = "x: ".concat(p.x, ", y: ").concat(p.y);
-  logArea.appendChild(el);
-});
-pointIntersections.forEach(function (p1, i1) {
-  pointIntersections.forEach(function (p2, i2) {
-    if (i1 !== i2) {
-      if (Math.hypot(p2.x - p1.x, p2.y - p1.y) <= radius) drawSingleLine(ctx, p1, p2);
-    }
+exports.drawLines = drawLines;
+
+var drawConnectingLines = function drawConnectingLines(ctx, intersetions, radius, drawSingleLine) {
+  intersetions.forEach(function (p1, i1) {
+    intersetions.forEach(function (p2, i2) {
+      if (i1 !== i2) {
+        if (Math.hypot(p2.x - p1.x, p2.y - p1.y) <= radius) drawSingleLine(ctx, p1, p2);
+      }
+    });
   });
-});
-},{"./index.css":"index.css","lodash":"node_modules/lodash/lodash.js"}],"../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+};
+
+exports.drawConnectingLines = drawConnectingLines;
+},{"lodash":"node_modules/lodash/lodash.js","./drawCircles":"src/drawCircles.js","./utils/lineFunctions":"src/utils/lineFunctions.js","./utils/randoms":"src/utils/randoms.js","./attributes":"src/attributes.js"}],"index.js":[function(require,module,exports) {
+"use strict";
+
+require("./index.css");
+
+var _randoms = require("./src/utils/randoms");
+
+var _DOMnodes = require("./src/DOMnodes");
+
+var _drawLines = require("./src/drawLines");
+
+var _attributes = require("./src/attributes");
+
+// y = mx + b
+// m is slope which is change in Y / change in X
+// b is y-intercept where line intersects y
+// yIntercept = b=y+mx
+var init = function init() {
+  var _draw2DCanvas = (0, _DOMnodes.draw2DCanvas)(),
+      ctx = _draw2DCanvas.ctx,
+      canvas = _draw2DCanvas.canvas;
+
+  var logArea = (0, _DOMnodes.drawLogArea)(canvas);
+  var start = {
+    x: (0, _randoms.xRandom)(),
+    y: (0, _randoms.yRandom)()
+  };
+  var end = {
+    x: (0, _randoms.xRandom)(),
+    y: (0, _randoms.yRandom)()
+  };
+  var pointIntersections = (0, _drawLines.drawLines)(ctx, start, end, _attributes.iterations, []);
+
+  if (_attributes.showLog) {
+    (0, _DOMnodes.drawIntersectionsLog)(pointIntersections, logArea);
+  }
+
+  if (_attributes.showConnectingLines) {
+    (0, _drawLines.drawConnectingLines)(ctx, pointIntersections, _attributes.radius, _drawLines.drawSingleLine);
+  }
+};
+
+init();
+},{"./index.css":"index.css","./src/utils/randoms":"src/utils/randoms.js","./src/DOMnodes":"src/DOMnodes.js","./src/drawLines":"src/drawLines.js","./src/attributes":"src/attributes.js"}],"../../.config/yarn/global/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -19472,7 +19629,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51246" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62028" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
