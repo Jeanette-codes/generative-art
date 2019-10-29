@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "parcel index.html",
-    "predeploy": "rm -rf dist && parcel build index.html",
+    "predeploy": "rm -rf dist && parcel build index.html --public-url /generative-art",
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
@@ -11,5 +11,6 @@
   "devDependencies": {
     "cssnano": "^4.1.10",
     "gh-pages": "^2.1.1"
-  }
+  },
+  "homepage": "https://fender-guy.github.io/generative-art/"
 }
