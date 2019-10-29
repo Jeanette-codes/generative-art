@@ -30,4 +30,4 @@ var n,t=arguments[3],r=require("buffer").Buffer;(function(){var r,e=200,u="Unsup
 },{"lodash":"HJaA","./drawCircles":"ZM74","./utils/lineFunctions":"Ifj8","./utils/randoms":"RLea","./attributes":"xMkr"}],"Focm":[function(require,module,exports) {
 "use strict";require("./index.css");var r=require("./src/utils/randoms"),e=require("./src/DOMnodes"),n=require("./src/drawLines"),s=require("./src/attributes"),a=function(){var a=(0,e.draw2DCanvas)(),i=a.ctx,o=a.canvas,d=(0,e.drawLogArea)(o),t={x:(0,r.xRandom)(),y:(0,r.yRandom)()},c={x:(0,r.xRandom)(),y:(0,r.yRandom)()},u=(0,n.drawLines)(i,t,c,s.iterations,[]);s.showLog&&(0,e.drawIntersectionsLog)(u,d),s.showConnectingLines&&(0,n.drawConnectingLines)(i,u,s.radius,n.drawSingleLine)};a();
 },{"./index.css":"vKFU","./src/utils/randoms":"RLea","./src/DOMnodes":"axZn","./src/drawLines":"CCrx","./src/attributes":"xMkr"}]},{},["Focm"], null)
-//# sourceMappingURL=/generative-art.b63bae43.js.map
+//# sourceMappingURL=generative-art/generative-art.b63bae43.js.map
