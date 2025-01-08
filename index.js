@@ -9,6 +9,9 @@ import { iterations, showConnectingLines, radius, showLog } from './src/attribut
 // b is y-intercept where line intersects y
 // yIntercept = b=y+mx
 
+
+// ALGO:
+// draw a line and find a random point on that line.
 const init = () => {
   const { ctx, canvas } = draw2DCanvas();
   const logArea = drawLogArea(canvas);
