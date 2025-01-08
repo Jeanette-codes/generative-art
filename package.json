@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "cssnano": "^4.1.10",
-    "gh-pages": "^2.1.1"
+    "gh-pages": "^2.1.1",
+    "parcel": "^2.13.3"
   },
   "homepage": "https://fender-guy.github.io/generative-art/"
 }

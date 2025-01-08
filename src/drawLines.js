@@ -34,8 +34,10 @@ export const drawLines = (ctx, start, end, iterations) => {
 
     intersections.push(newStart);
 
-    if(showIntersectingCircles) drawCircle(ctx, newStart.x, newStart.y, radius);
-    if(iter) drawFunc(ctx, newStart, newEnd, iter);
+    if(iter >= 0) {
+      drawFunc(ctx, newStart, newEnd, iter);
+      if(showIntersectingCircles) drawCircle(ctx, newStart.x, newStart.y, radius);
+    }
   }
 
   drawFunc(ctx, start, end, iter);
