@@ -5,13 +5,22 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
+    "@mantine/core": "^7.16.0",
+    "@mantine/hooks": "^7.16.0",
+    "@reduxjs/toolkit": "^2.5.0",
     "global": "^4.4.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0"
   },
   "devDependencies": {
     "cssnano": "^4.1.10",
     "gh-pages": "^2.1.1",
-    "parcel": "^2.13.3"
+    "parcel": "^2.13.3",
+    "postcss": "^8.5.1",
+    "postcss-preset-mantine": "^1.17.0",
+    "postcss-simple-vars": "^7.0.1"
   },
   "homepage": "https://fender-guy.github.io/generative-art/"
 }
