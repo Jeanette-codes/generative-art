@@ -1,23 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 #canvas {
-  border: 1px solid black;
-  display: inline-block;
-  vertical-align: top;
-  /*transform: scale(0.5);*/
-}
-
-#log-area {
-  display: inline-block;
-  width: 180px;
-  vertical-align: top;
-  font-family: Helvetica Neue,Helvetica,Arial,sans-serif; 
-  font-size: 12px;
-  margin: 0 0 0 10px;
-  height: 800px;
-  overflow: scroll;
-}
-
-#log-area div {
-  width: 80px;
-  margin: 2px 5px;
-  display: inline-block;
+    border: 1px solid black;
 }

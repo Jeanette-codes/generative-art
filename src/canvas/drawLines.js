@@ -15,6 +15,10 @@ export const drawSingleLine = (ctx, start, end, color) => {
 export const drawLines = (ctx, start, end, iterations) => {
     let intersections = []
     let iter = iterations
+    const width = ctx.canvas.width
+    const height = ctx.canvas.height
+
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
     const drawFunc = (ctx, start, end, iter) => {
         if (showInitialLines)
@@ -28,10 +32,10 @@ export const drawLines = (ctx, start, end, iterations) => {
         const newStartX = round(randomX)
         const newStart = {
             x: newStartX,
-            y: start.x === newStartX ? yRandom() : round(yFromX),
+            y: start.x === newStartX ? yRandom(height) : round(yFromX),
         }
 
-        const newEnd = { x: xRandom(), y: yRandom() }
+        const newEnd = { x: xRandom(width), y: yRandom(height) }
 
         iter--
 
