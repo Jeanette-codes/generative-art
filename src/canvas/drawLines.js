@@ -2,7 +2,6 @@ import { round } from 'lodash'
 import { drawCircle } from './drawCircles'
 import { getSlope, getYIntercept } from './utils/lineFunctions'
 import { xRandom, yRandom, getRandomX } from './utils/randoms'
-import { showInitialLines, showIntersectingCircles, radius } from './attributes'
 
 export const drawSingleLine = (ctx, start, end, color) => {
     ctx.beginPath()
@@ -12,7 +11,15 @@ export const drawSingleLine = (ctx, start, end, color) => {
     ctx.stroke()
 }
 
-export const drawLines = (ctx, start, end, iterations) => {
+export const drawLines = (
+    ctx,
+    start,
+    end,
+    iterations,
+    showInitialLines,
+    showIntersectingCircles,
+    circleRadius
+) => {
     let intersections = []
     let iter = iterations
     const width = ctx.canvas.width
@@ -44,7 +51,7 @@ export const drawLines = (ctx, start, end, iterations) => {
         if (iter >= 0) {
             drawFunc(ctx, newStart, newEnd, iter)
             if (showIntersectingCircles)
-                drawCircle(ctx, newStart.x, newStart.y, radius)
+                drawCircle(ctx, newStart.x, newStart.y, circleRadius)
         }
     }
 
@@ -55,13 +62,13 @@ export const drawLines = (ctx, start, end, iterations) => {
 export const drawConnectingLines = (
     ctx,
     intersetions,
-    radius,
+    circleRadius,
     drawSingleLine
 ) => {
     intersetions.forEach((p1, i1) => {
         intersetions.forEach((p2, i2) => {
             if (i1 !== i2) {
-                if (Math.hypot(p2.x - p1.x, p2.y - p1.y) <= radius)
+                if (Math.hypot(p2.x - p1.x, p2.y - p1.y) <= circleRadius)
                     drawSingleLine(ctx, p1, p2)
             }
         })

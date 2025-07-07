@@ -8,18 +8,18 @@ export interface CounterState {
     showInitialLines: boolean
     showIntersectingCircles: boolean
     showConnectingLines: boolean
-    radius: number
+    circleRadius: number
     iterations: number
 }
 
 const initialState: CounterState = {
     value: 0,
-    canvasWidth: 500,
-    canvasHeight: 720,
+    canvasWidth: 800,
+    canvasHeight: 600,
     showInitialLines: true,
     showIntersectingCircles: true,
-    showConnectingLines: false,
-    radius: 50,
+    showConnectingLines: true,
+    circleRadius: 50,
     iterations: 20,
 }
 
@@ -27,27 +27,31 @@ export const canvasSlice = createSlice({
     name: 'canvas',
     initialState,
     reducers: {
-        increment: (state) => {
-            // Redux Toolkit allows us to write "mutating" logic in reducers. It
-            // doesn't actually mutate the state because it uses the Immer library,
-            // which detects changes to a "draft state" and produces a brand new
-            // immutable state based off those changes
-            state.value += 1
-        },
-        decrement: (state) => {
-            state.value -= 1
-        },
-        incrementByAmount: (state, action: PayloadAction<number>) => {
-            state.value += action.payload
-        },
         changeIterations: (state, action: PayloadAction<number>) => {
             state.iterations = action.payload
+        },
+        toggleShowInitialLines: (state, action: PayloadAction<boolean>) => {
+            state.showInitialLines = action.payload
+        },
+        toggleIntersectingCircles: (state, action: PayloadAction<boolean>) => {
+            state.showIntersectingCircles = action.payload
+        },
+        changeCircleRadius: (state, action: PayloadAction<number>) => {
+            state.circleRadius = action.payload
+        },
+        toggleShowConnectingLines: (state, action: PayloadAction<boolean>) => {
+            state.showConnectingLines = action.payload
         },
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount, changeIterations } =
-    canvasSlice.actions
+export const {
+    changeIterations,
+    toggleShowInitialLines,
+    toggleIntersectingCircles,
+    changeCircleRadius,
+    toggleShowConnectingLines,
+} = canvasSlice.actions
 
 export default canvasSlice.reducer

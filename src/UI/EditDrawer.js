@@ -8,13 +8,30 @@ import {
     Button,
     useDisclosure,
     Slider,
+    Switch,
 } from '@heroui/react'
-import { changeIterations } from '../state/slices/canvas'
+import {
+    changeIterations,
+    toggleIntersectingCircles,
+    changeCircleRadius,
+    toggleShowConnectingLines,
+    toggleShowInitialLines,
+} from '../state/slices/canvas'
 import { useAppSelector, useAppDispatch } from '../hooks'
 
 export const EditDrawer = () => {
     const { isOpen, onOpen, onOpenChange } = useDisclosure()
     const iterations = useAppSelector((state) => state.canvas.iterations)
+    const showInitialLines = useAppSelector(
+        (state) => state.canvas.showInitialLines
+    )
+    const showIntersectingCircles = useAppSelector(
+        (state) => state.canvas.showIntersectingCircles
+    )
+    const circleRadius = useAppSelector((state) => state.canvas.circleRadius)
+    const showConnectingLines = useAppSelector(
+        (state) => state.canvas.showConnectingLines
+    )
     const dispatch = useAppDispatch()
 
     return (
@@ -29,40 +46,53 @@ export const EditDrawer = () => {
                             </DrawerHeader>
                             <DrawerBody>
                                 <Slider
-                                    className=""
                                     defaultValue={iterations}
                                     label="Iterations"
                                     maxValue={1000}
-                                    showTooltip={true}
                                     minValue={0}
                                     step={1}
                                     onChangeEnd={(value) =>
                                         dispatch(changeIterations(value))
                                     }
                                 />
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Nullam pulvinar risus non
-                                    risus hendrerit venenatis. Pellentesque sit
-                                    amet hendrerit risus, sed porttitor quam.
-                                </p>
-                                <p>
-                                    Lorem ipsum dolor sit amet, consectetur
-                                    adipiscing elit. Nullam pulvinar risus non
-                                    risus hendrerit venenatis. Pellentesque sit
-                                    amet hendrerit risus, sed porttitor quam.
-                                </p>
-                                <p>
-                                    Magna exercitation reprehenderit magna aute
-                                    tempor cupidatat consequat elit dolor
-                                    adipisicing. Mollit dolor eiusmod sunt ex
-                                    incididunt cillum quis. Velit duis sit
-                                    officia eiusmod Lorem aliqua enim laboris do
-                                    dolor eiusmod. Et mollit incididunt nisi
-                                    consectetur esse laborum eiusmod pariatur
-                                    proident Lorem eiusmod et. Culpa deserunt
-                                    nostrud ad veniam.
-                                </p>
+                                <Switch
+                                    onValueChange={(value) =>
+                                        dispatch(toggleShowInitialLines(value))
+                                    }
+                                    isSelected={showInitialLines}
+                                >
+                                    Show Initial Lines
+                                </Switch>
+                                <Switch
+                                    onValueChange={(value) =>
+                                        dispatch(
+                                            toggleIntersectingCircles(value)
+                                        )
+                                    }
+                                    isSelected={showIntersectingCircles}
+                                >
+                                    Show Intersecting Circles
+                                </Switch>
+                                <Slider
+                                    defaultValue={circleRadius}
+                                    label="Circle Radius"
+                                    maxValue={50}
+                                    minValue={0}
+                                    step={1}
+                                    onChangeEnd={(value) =>
+                                        dispatch(changeCircleRadius(value))
+                                    }
+                                />
+                                <Switch
+                                    onValueChange={(value) =>
+                                        dispatch(
+                                            toggleShowConnectingLines(value)
+                                        )
+                                    }
+                                    isSelected={showConnectingLines}
+                                >
+                                    Show Connecting Lines
+                                </Switch>
                             </DrawerBody>
                             <DrawerFooter>
                                 <Button
@@ -71,9 +101,6 @@ export const EditDrawer = () => {
                                     onPress={onClose}
                                 >
                                     Close
-                                </Button>
-                                <Button color="primary" onPress={onClose}>
-                                    Action
                                 </Button>
                             </DrawerFooter>
                         </>
