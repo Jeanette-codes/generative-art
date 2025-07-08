@@ -2,7 +2,7 @@
     "name": "generative-art-creator",
     "scripts": {
         "start": "parcel index.html",
-        "predeploy": "rm -rf dist && parcel build index.html --public-url /generative-art",
+        "predeploy": "rm -rf dist .parcel-cache && parcel build index.html --detailed-report",
         "deploy": "gh-pages -d dist"
     },
     "dependencies": {
